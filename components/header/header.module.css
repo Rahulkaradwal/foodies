@@ -13,12 +13,6 @@
   }
 }
 
-.link {
-  color: white;
-  font-size: 1.5rem;
-  text-decoration: none;
-}
-
 .header-menu {
   display: flex;
   gap: 3rem;
@@ -39,11 +33,4 @@
 .header-container link {
   color: white;
   font-weight: 700;
-}
-
-.active {
-  background: linear-gradient(90deg, #ff8a05, #f9b331);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
