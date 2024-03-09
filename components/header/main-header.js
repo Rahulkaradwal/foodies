@@ -8,7 +8,7 @@ function Header() {
   return (
     <div className={styles['header-container']}>
       <Link href="/" className={styles['header-menu']}>
-        <Image src={logo} alt="logo" />
+        <Image src={logo} alt="logo" priority />
         <p>NEXTLEVEL FOOD</p>
       </Link>
       <div className={styles['header-menu']}>
