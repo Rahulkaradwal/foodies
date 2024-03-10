@@ -2,10 +2,15 @@ import React from 'react';
 import styles from './page.module.css';
 import { getMeal } from '@/dataRequest/meals';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 function MealDetails({ params }) {
   // by defulat next sends params to the components
 
   const meal = getMeal(params.mealSlug);
+  if (!meal) {
+    notFound();
+    // it will show the nearest not found page
+  }
 
   meal.instructions = meal.instructions.replace(/\n/g, '<br />');
   return (
