@@ -181,16 +181,25 @@ db.prepare(
 
 async function initData() {
   const stmt = db.prepare(`
-      INSERT INTO meals VALUES (
-         null,
-         @slug,
-         @title,
-         @image,
-         @summary,
-         @instructions,
-         @creator,
-         @creator_email
-      )
+      INSERT OR REPLACE INTO meals (
+      id,
+      slug,
+      title,
+      image,
+      summary,
+      instructions,
+      creator,
+      creator_email
+    ) VALUES (
+      null,
+      @slug,
+      @title,
+      @image,
+      @summary,
+      @instructions,
+      @creator,
+      @creator_email
+    )
    `);
 
   for (const meal of dummyMeals) {
