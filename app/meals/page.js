@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import styles from './page.module.css';
 import Link from 'next/link';
 import { getMeals } from '@/dataRequest/meals';
 import MealGrid from '@/components/meals/MealGrid';
 
-// in nextjs we can create async component
-async function Meals() {
+async function Meal() {
   const meals = await getMeals();
+
+  return <MealGrid meals={meals} />;
+}
+
+// in nextjs we can create async component
+function Meals() {
   return (
     <>
       <header className={styles.header}>
@@ -23,7 +28,9 @@ async function Meals() {
         </p>
       </header>
       <main className={styles.main}>
-        <MealGrid meals={meals} />
+        <Suspense fallback={<p className={styles.loading}>fetching data</p>}>
+          <Meal />
+        </Suspense>
       </main>
     </>
   );
