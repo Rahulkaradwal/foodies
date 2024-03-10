@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getMeals } from '@/dataRequest/meals';
 import MealGrid from '@/components/meals/MealGrid';
 
+// in nextjs we can create async component
 async function Meals() {
   const meals = await getMeals();
   return (
