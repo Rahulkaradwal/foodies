@@ -18,22 +18,34 @@ export async function saveMeal(meal) {
   meal.instructions = xss(meal.instructions);
 
   const extension = meal.image.name.split('.').pop();
-  const fileName = `${meal.slug}.${extension} `;
+  // Remove the extraneous space in the fileName.
+  const fileName = `${meal.slug}.${extension}`;
 
-  const stream = fs.createWriteStream(`public/image/${fileName}`);
+  const stream = fs.createWriteStream(`public/images/${fileName}`);
   const bufferedImage = await meal.image.arrayBuffer();
-  stream.write(Buffer.from(bufferedImage), (error) => {
-    if (error) {
-      throw new Error('Saving image failed!');
-    }
+  const buffer = Buffer.from(bufferedImage);
+
+  // Await the completion of the image saving process.
+  await new Promise((resolve, reject) => {
+    stream.write(buffer, (error) => {
+      if (error) {
+        console.error('Error saving the image:', error);
+        stream.close();
+        reject(new Error('Saving image failed!'));
+      } else {
+        stream.on('finish', resolve);
+        stream.end();
+      }
+    });
   });
 
-  meal.image = `/image/${fileName}`;
+  // Update the meal image path for the database.
+  meal.image = `/images/${fileName}`;
 
+  // Insert the meal data into the database.
   db.prepare(
     `
-  INSERT INTO meals (
-      
+    INSERT INTO meals (
       slug,
       title,
       image,
@@ -42,7 +54,6 @@ export async function saveMeal(meal) {
       creator,
       creator_email
     ) VALUES (
-      
       @slug,
       @title,
       @image,
@@ -51,6 +62,6 @@ export async function saveMeal(meal) {
       @creator,
       @creator_email
     )
-   `
+  `
   ).run(meal);
 }
